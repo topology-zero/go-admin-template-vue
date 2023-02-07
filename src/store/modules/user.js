@@ -1,12 +1,13 @@
 import { login, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { resetRouter, asyncRoutes } from '@/router'
 
 const getDefaultState = () => {
     return {
         token: getToken(),
         userInfo: {},
-        authKey: []
+        authKey: [],
+        userRouter: []
     }
 }
 
@@ -19,6 +20,13 @@ const mutations = {
     SET_USER_INFO: (state, userInfo) => {
         state.userInfo = userInfo
         state.authKey = userInfo.authkeys.split(',')
+
+        // 设置路由
+        asyncRoutes.map(v => {
+            if (userInfo.authkeys == '*' || state.authKey.includes(v.permission)) {
+                state.userRouter.push(v)
+            }
+        })
     },
     LOGOUT: (state) => {
         removeToken() // must remove  token  first

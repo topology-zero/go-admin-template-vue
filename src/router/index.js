@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import admin from './modules/admin/index'
+import other from './modules/other/index'
 
 Vue.use(Router)
 
@@ -46,89 +48,25 @@ export const constantRoutes = [
     {
         path: '/',
         component: Layout,
-        redirect: '/dashboard',
-        children: [{
-            path: 'dashboard',
-            name: 'Dashboard',
-            component: () => import('@/views/dashboard/index'),
-            meta: { title: '首页', icon: 'dashboard' }
-        }]
+        redirect: '/placeholder'
     },
-
     {
-        path: '/admin',
-        component: Layout,
-        redirect: '/admin/user',
-        name: 'admin',
-        permission: 'admin',
-        meta: { title: '后台管理', icon: 'el-icon-s-help' },
-        children: [
+        path: '/placeholder'
+    }
+]
 
-            // 用户相关
-            {
-                path: 'user',
-                name: 'user',
-                permission: 'admin:user',
-                component: () => import('@/views/admin/user/index'),
-                meta: { title: '用户管理', icon: 'table' }
-
-            },
-            {
-                hidden: true,
-                path: 'user/add',
-                name: 'useradd',
-                component: () => import('@/views/admin/user/add'),
-                meta: { title: '添加用户', icon: 'table' }
-            },
-            {
-                hidden: true,
-                path: 'user/edit',
-                name: 'useredit',
-                component: () => import('@/views/admin/user/edit'),
-                meta: { title: '编辑用户', icon: 'table' }
-            },
-
-            // 角色相关
-            {
-                path: 'role',
-                name: 'role',
-                permission: 'admin:role',
-                component: () => import('@/views/admin/role/index'),
-                meta: { title: '角色管理', icon: 'tree' }
-            }, {
-                hidden: true,
-                path: 'role/add',
-                name: 'roleadd',
-                component: () => import('@/views/admin/role/add'),
-                meta: { title: '添加角色', icon: 'table' }
-            },
-            {
-                hidden: true,
-                path: 'role/edit',
-                name: 'roleedit',
-                component: () => import('@/views/admin/role/edit'),
-                meta: { title: '编辑角色', icon: 'table' }
-            },
-
-            // 权限相关
-            {
-                path: 'auth',
-                name: 'auth',
-                permission: 'admin:auth',
-                component: () => import('@/views/admin/auth/index'),
-                meta: { title: '权限管理', icon: 'tree' }
-            }
-        ]
-    },
-
-    // 404 page must be placed at the end !!!
-    { path: '*', redirect: '/404', hidden: true }
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+    admin, other
 ]
 
 const createRouter = () => new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: constantRoutes.concat(...asyncRoutes.map(v => v.router), [{ path: '*', redirect: '/404', hidden: true }])
 })
 
 const router = createRouter()

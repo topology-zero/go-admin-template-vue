@@ -31,11 +31,13 @@ export default {
     computed: {
         ...mapGetters([
             'sidebar',
-            'authKey'
+            'authKey',
+            'currentRouter'
         ]),
         routes() {
             // 需要将对象深拷贝,否则会出现问题
-            const routes = JSON.parse(JSON.stringify(this.$router.options.routes))
+            const routes = JSON.parse(JSON.stringify(this.currentRouter))
+
             if (this.authKey.length == 1 && this.authKey[0] == '*') {
                 return routes
             }

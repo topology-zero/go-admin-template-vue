@@ -4,7 +4,9 @@
                    class="hamburger-container"
                    @toggleClick="toggleSideBar" />
 
-        <breadcrumb class="breadcrumb-container" />
+        <breadcrumb v-if="false" class="breadcrumb-container" />
+
+        <top-nav v-if="true" id="topmenu-container" class="breadcrumb-container" />
 
         <div class="right-menu">
             <div class="user-info">
@@ -87,12 +89,14 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import TopNav from '@/components/TopNav'
 import { changePwd } from '@/api/user'
 
 export default {
     components: {
         Breadcrumb,
-        Hamburger
+        Hamburger,
+        TopNav
     },
     data() {
         return {

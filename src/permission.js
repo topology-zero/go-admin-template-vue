@@ -26,7 +26,11 @@ router.beforeEach(async(to, from, next) => {
             } else {
                 try {
                     await store.dispatch('user/getUserInfo')
-                    next()
+                    if (to.path == '/placeholder') {
+                        next({ path: store.getters.userRouter[0].path })
+                    } else {
+                        next()
+                    }
                 } catch (error) {
                     // store.commit('user/LOGOUT')
                     Message.error(error)
