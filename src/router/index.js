@@ -70,22 +70,8 @@ export const constantRoutes = [
                 name: 'user',
                 permission: 'admin:user',
                 component: () => import('@/views/admin/user/index'),
-                meta: { title: '用户管理', icon: 'table' }
+                meta: { title: '用户管理', icon: 'el-icon-s-help' }
 
-            },
-            {
-                hidden: true,
-                path: 'user/add',
-                name: 'useradd',
-                component: () => import('@/views/admin/user/add'),
-                meta: { title: '添加用户', icon: 'table' }
-            },
-            {
-                hidden: true,
-                path: 'user/edit',
-                name: 'useredit',
-                component: () => import('@/views/admin/user/edit'),
-                meta: { title: '编辑用户', icon: 'table' }
             },
 
             // 角色相关
@@ -94,20 +80,7 @@ export const constantRoutes = [
                 name: 'role',
                 permission: 'admin:role',
                 component: () => import('@/views/admin/role/index'),
-                meta: { title: '角色管理', icon: 'tree' }
-            }, {
-                hidden: true,
-                path: 'role/add',
-                name: 'roleadd',
-                component: () => import('@/views/admin/role/add'),
-                meta: { title: '添加角色', icon: 'table' }
-            },
-            {
-                hidden: true,
-                path: 'role/edit',
-                name: 'roleedit',
-                component: () => import('@/views/admin/role/edit'),
-                meta: { title: '编辑角色', icon: 'table' }
+                meta: { title: '角色管理', icon: 'el-icon-s-help' }
             },
 
             // 权限相关
@@ -116,7 +89,7 @@ export const constantRoutes = [
                 name: 'auth',
                 permission: 'admin:auth',
                 component: () => import('@/views/admin/auth/index'),
-                meta: { title: '权限管理', icon: 'tree' }
+                meta: { title: '权限管理', icon: 'el-icon-s-help' }
             }
         ]
     },
