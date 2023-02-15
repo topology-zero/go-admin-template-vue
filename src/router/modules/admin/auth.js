@@ -5,7 +5,7 @@ const router = [
         name: 'auth',
         permission: 'admin:auth',
         component: () => import('@/views/admin/auth/index'),
-        meta: { title: '权限管理', icon: 'tree' }
+        meta: { title: '权限管理', icon: 'el-icon-s-help' }
     }
 ]
 

@@ -57,11 +57,44 @@
                            @size-change="handleSizeChange"
                            @current-change="handleCurrentChange" />
         </div>
+        <el-dialog :title="formDataId == 0 ? '添加角色' : '编辑角色'"
+                   :visible.sync="dialogVisible"
+                   width="30%">
+            <el-form ref="elForm"
+                     v-loading="needloading"
+                     :model="formData"
+                     label-width="100px"
+                     element-loading-background="rgba(255, 255, 255, 0.99)">
+                <el-form-item label="角色名"
+                              :rules="{ required: true, trigger: 'change', message: '请输入角色名' }"
+                              prop="name">
+                    <el-input v-model="formData.name" />
+                </el-form-item>
+                <el-form-item label="权限"
+                              :rules="{ type: 'array', required: true, min: 1, message: '请选择权限' }"
+                              prop="auth">
+                    <el-tree ref="tree"
+                             :data="treeData"
+                             node-key="id"
+                             default-expand-all
+                             show-checkbox
+                             :props="{label: 'name',children: 'child'}"
+                             @check="setAuth" />
+                </el-form-item>
+            </el-form>
+            <span slot="footer"
+                  class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary"
+                           @click="submitForm()">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { getList, del } from './api'
+import { getAuths } from '@/api/common'
+import { getList, add, edit, del, getDetail } from './api'
 import { pageMixin } from '@/utils/mixin'
 export default {
     name: 'AdminRole',
@@ -70,19 +103,57 @@ export default {
         return {
             params: {
                 name: ''
-            }
+            },
+            formDataId: 0,
+            formData: {
+                name: '',
+                auth: []
+            },
+            treeData: [],
+            dialogVisible: false,
+            needloading: false
         }
     },
     methods: {
-        // 跳转到编辑用户
-        handleEdit(info) {
-            this.$router.push({ path: '/admin/role/edit', query: { id: info.id }})
+        // 添加角色
+        async handleAdd() {
+            this.dialogVisible = true
+            this.formDataId = 0
+            this.formData.name = ''
+            this.formData.auth = []
+            this._getAuths()
+            await this.$nextTick()
+            this.$refs.tree.setCheckedKeys([])
         },
-        // 跳转到添加用户
-        handleAdd() {
-            this.$router.push('/admin/role/add')
+        // 编辑角色
+        async handleEdit(info) {
+            this.dialogVisible = true
+            this.needloading = true
+            this._getAuths()
+            this.formDataId = info.id
+            const { data } = await getDetail(info.id)
+            this.formData = data
+            await this.$nextTick()
+            this.$refs.tree.setCheckedKeys(this.formData.auth, false)
+            this.needloading = false
         },
-        // 删除用户
+        // 添加 or 编辑角色提交
+        async submitForm() {
+            this.formData.auth = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
+            await this.$refs.elForm.validate()
+            this.needloading = true
+            if (this.formDataId == 0) {
+                await add(this.formData)
+            } else {
+                await edit(this.formDataId, this.formData)
+            }
+            this.dialogVisible = false
+            this.needloading = false
+            this._getData()
+            this.$message.success('成功')
+        },
+
+        // 删除角色
         async handleDel(info) {
             await this.$confirm('删除角色不可恢复', '警告')
             const { message } = await del(info.id)
@@ -97,6 +168,20 @@ export default {
             this.pageSize = res.data.per_page
             this.page = res.data.current_page
             this.table_loading = false
+        },
+        // 获取所有权限
+        async _getAuths() {
+            if (this.treeData && this.treeData.length > 0) {
+                return
+            }
+            this.needloading = true
+            const { data } = await getAuths()
+            this.treeData = data.tree
+            this.needloading = false
+        },
+        setAuth(data, { checkedKeys, halfCheckedKeys }) {
+            this.formData.auth = checkedKeys.concat(halfCheckedKeys)
+            this.$refs.elForm.validate()
         }
     }
 }

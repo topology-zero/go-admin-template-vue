@@ -5,22 +5,8 @@ const router = [
         name: 'user',
         permission: 'admin:user',
         component: () => import('@/views/admin/user/index'),
-        meta: { title: '用户管理', icon: 'table' }
+        meta: { title: '用户管理', icon: 'el-icon-s-help' }
 
-    },
-    {
-        hidden: true,
-        path: 'user/add',
-        name: 'useradd',
-        component: () => import('@/views/admin/user/add'),
-        meta: { title: '添加用户', icon: 'table' }
-    },
-    {
-        hidden: true,
-        path: 'user/edit',
-        name: 'useredit',
-        component: () => import('@/views/admin/user/edit'),
-        meta: { title: '编辑用户', icon: 'table' }
     }
 ]
 
