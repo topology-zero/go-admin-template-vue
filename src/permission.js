@@ -28,7 +28,7 @@ router.beforeEach(async(to, from, next) => {
                     await store.dispatch('user/getUserInfo')
                     next()
                 } catch (error) {
-                    // store.commit('user/LOGOUT')
+                    store.commit('user/LOGOUT')
                     Message.error(error)
                     next(`/login?redirect=${to.path}`)
                     NProgress.done()
