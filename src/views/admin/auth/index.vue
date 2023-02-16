@@ -78,20 +78,22 @@
         </el-table>
 
         <el-dialog :visible.sync="showDialog"
-                   :title="dialogTitle">
+                   :title="formDataId == 0 ? '添加权限' : '编辑权限'">
             <el-form ref="elForm"
                      :model="formData"
-                     :rules="rules"
                      label-width="100px">
                 <el-form-item label="节点名"
+                              :rules="{ required: true, trigger: 'blur', message: '请输入节点名' }"
                               prop="name">
                     <el-input v-model="formData.name" />
                 </el-form-item>
                 <el-form-item label="权限标识"
+                              :rules="{ required: true, trigger: 'blur', message: '请输入权限标识' }"
                               prop="key">
                     <el-input v-model="formData.key" />
                 </el-form-item>
                 <el-form-item label="是否菜单栏"
+                              :rules="{ required: true, trigger: 'blur', type: 'enum', enum: [0, 1], message: '请选择是否菜单栏' }"
                               prop="isMenu">
                     <el-radio-group v-model.number="formData.isMenu">
                         <el-radio border
@@ -104,6 +106,7 @@
                 </el-form-item>
                 <el-form-item v-if="formData.isMenu == 0"
                               label="请求方法"
+                              :rules="{ required: true, trigger: 'blur', message: '请输入请求方法' }"
                               prop="action">
                     <el-radio-group v-model="formData.action">
                         <el-radio border
@@ -122,6 +125,7 @@
                 </el-form-item>
                 <el-form-item v-if="formData.isMenu == 0"
                               label="请求接口"
+                              :rules="{ required: true, trigger: 'blur', message: '请输入请求接口' }"
                               prop="api">
                     <el-input v-model="formData.api" />
                 </el-form-item>
@@ -136,34 +140,29 @@
     </div>
 </template>
 <script>
+const defaultFormData = () => {
+    return {
+        pid: '',
+        name: '',
+        key: '',
+        isMenu: '',
+        action: '',
+        api: ''
+    }
+}
 import { getList, add, edit, del } from './api'
 export default {
     name: 'AdminAuth',
     data() {
         return {
-            formData: {
-                id: '',
-                pid: '',
-                name: '',
-                key: '',
-                isMenu: '',
-                action: '',
-                api: ''
-            },
+            needloading: true,
+            showDialog: false,
+            formDataId: 0,
+            formData: defaultFormData(),
             treeData: [],
             treeConfig: {
                 label: 'name',
                 children: 'child'
-            },
-            needloading: true,
-            showDialog: false,
-            dialogTitle: '',
-            rules: {
-                name: { required: true, trigger: 'blur', message: '请输入节点名' },
-                key: { required: true, trigger: 'blur', message: '请输入权限标识' },
-                isMenu: { required: true, trigger: 'blur', message: '请选择是否菜单栏' },
-                action: { required: true, trigger: 'blur', message: '请输入请求方法' },
-                api: { required: true, trigger: 'blur', message: '请输入请求接口' }
             }
         }
     },
@@ -198,26 +197,25 @@ export default {
             }
         },
         addTop() {
-            this.reset()
+            this.formDataId = 0
+            this.formData = defaultFormData()
             this.showDialog = true
-            this.dialogTitle = '添加权限'
             this.formData.pid = 0
             this.formData.isMenu = 1
         },
         // 添加权限
         add(data) {
-            this.reset()
+            this.formDataId = 0
+            this.formData = defaultFormData()
             this.showDialog = true
-            this.dialogTitle = '添加权限'
             this.formData.pid = data.id
             this.formData.isMenu = 0
         },
         // 编辑权限
         edit(data) {
-            this.reset()
+            this.formData = defaultFormData()
             this.showDialog = true
-            this.dialogTitle = '编辑权限'
-            this.formData.id = data.id
+            this.formDataId = data.id
             this.formData.pid = data.pid
             this.formData.name = data.name
             this.formData.key = data.key
@@ -231,18 +229,6 @@ export default {
             const { message } = await del(data.id)
             this.$message.success(message)
             this.getAuth()
-        },
-        // 清空数据
-        reset() {
-            this.formData = {
-                id: '',
-                pid: '',
-                name: '',
-                key: '',
-                isMenu: '',
-                action: '',
-                api: ''
-            }
         }
     }
 }

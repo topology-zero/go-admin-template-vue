@@ -93,6 +93,12 @@
 </template>
 
 <script>
+const defaultFormData = () => {
+    return {
+        name: '',
+        auth: []
+    }
+}
 import { getAuths } from '@/api/common'
 import { getList, add, edit, del, getDetail } from './api'
 import { pageMixin } from '@/utils/mixin'
@@ -105,10 +111,7 @@ export default {
                 name: ''
             },
             formDataId: 0,
-            formData: {
-                name: '',
-                auth: []
-            },
+            formData: defaultFormData(),
             treeData: [],
             dialogVisible: false,
             needloading: false
@@ -119,8 +122,7 @@ export default {
         async handleAdd() {
             this.dialogVisible = true
             this.formDataId = 0
-            this.formData.name = ''
-            this.formData.auth = []
+            this.formData = defaultFormData()
             this._getAuths()
             await this.$nextTick()
             this.$refs.tree.setCheckedKeys([])
