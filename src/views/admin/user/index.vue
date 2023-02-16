@@ -135,6 +135,16 @@
 </template>
 
 <script>
+const defaultFormData = () => {
+    return {
+        username: '',
+        password: '',
+        realname: '',
+        roleId: '',
+        status: 1,
+        phone: ''
+    }
+}
 import { getRoles } from '@/api/common'
 import { getList, add, edit, del, getDetail } from './api'
 import { pageMixin } from '@/utils/mixin'
@@ -148,14 +158,7 @@ export default {
             },
             dialogVisible: false,
             formDataId: 0,
-            formData: {
-                username: '',
-                password: '',
-                realname: '',
-                roleId: '',
-                status: 1,
-                phone: ''
-            },
+            formData: defaultFormData(),
             roleOptions: []
         }
     },
@@ -171,12 +174,7 @@ export default {
             this._getRoles()
             this.dialogVisible = true
             this.formDataId = 0
-            this.formData.username = ''
-            this.formData.password = ''
-            this.formData.realname = ''
-            this.formData.roleId = ''
-            this.formData.status = 1
-            this.formData.phone = ''
+            this.formData = defaultFormData()
         },
         // 编辑用户
         async handleEdit(info) {
