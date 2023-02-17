@@ -33,7 +33,7 @@
                 <el-tab-pane label="vue">
                     <el-button type="success"
                                class="copy-btn"
-                               round
+                               size="mini"
                                @click="copyText(vueTpl, $event)">复制 vue 内容</el-button>
                     <pre>{{ vueTpl }}</pre>
                 </el-tab-pane>
