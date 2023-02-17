@@ -4,17 +4,11 @@
         <div class="filter-container">
             <el-button v-permission="`admin:user:add`"
                        type="primary"
+                       size="small"
                        plain
-                       class="filter-item"
                        @click="handleAdd()">
                 添加用户
             </el-button>
-            <!-- <div style="float: right; display: flex">
-                <el-input v-model="params.name" placeholder="姓名|手机号" style="width: 200px; margin: 0 3px"
-                    class="filter-item" />
-                <el-button type="primary" class="filter-item" @click="search()">搜索
-                </el-button>
-            </div> -->
         </div>
         <el-table v-loading="table_loading"
                   element-loading-text="加载中..."

@@ -5,16 +5,11 @@
             <el-button v-permission="`admin:role:add`"
                        type="primary"
                        plain
+                       size="mini"
                        class="filter-item"
                        @click="handleAdd()">
                 添加角色
             </el-button>
-            <!-- <div style="float: right; display: flex">
-                <el-input v-model="params.name" placeholder="姓名|手机号" style="width: 200px; margin: 0 3px"
-                    class="filter-item" />
-                <el-button type="primary" class="filter-item" @click="search()">搜索
-                </el-button>
-            </div> -->
         </div>
         <el-table v-loading="table_loading"
                   element-loading-text="加载中..."
