@@ -66,11 +66,18 @@ div:focus {
 
 .filter-container {
     padding-bottom: 10px;
+
+    .search-box{
+        display: flex;
+        flex-wrap: wrap;
+    }
   
     .filter-item {
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: top;
       margin-bottom: 10px;
+      margin-right: 10px;
+      width: 200px;
     }
   }
   

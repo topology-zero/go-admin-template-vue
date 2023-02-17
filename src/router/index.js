@@ -94,6 +94,24 @@ export const constantRoutes = [
         ]
     },
 
+    {
+        path: '/generate',
+        hidden: process.env.ENV == 'prod',
+        component: Layout,
+        redirect: '/generate/generate',
+        name: 'generate',
+        meta: { title: '代码生成', icon: 'el-icon-s-help' },
+        children: [
+            {
+                path: 'generate',
+                name: 'generate:generate',
+                component: () => import('@/views/generate/index'),
+                meta: { title: '代码生成', icon: 'el-icon-s-help' }
+
+            }
+        ]
+    },
+
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]
