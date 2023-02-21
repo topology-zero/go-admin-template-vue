@@ -37,6 +37,13 @@
                                @click="copyText(vueTpl, $event)">复制 vue 内容</el-button>
                     <pre>{{ vueTpl }}</pre>
                 </el-tab-pane>
+                <el-tab-pane label="api">
+                    <el-button type="success"
+                               class="copy-btn"
+                               size="mini"
+                               @click="copyText(apiTpl, $event)">复制 api 内容</el-button>
+                    <pre>{{ apiTpl }}</pre>
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
     </div>
@@ -53,7 +60,8 @@ export default {
             table_loading: false,
             list: [],
             jsTpl: '',
-            vueTpl: ''
+            vueTpl: '',
+            apiTpl: ''
         }
     },
     created() {
@@ -66,6 +74,7 @@ export default {
             const { data } = await add({ 'table': table })
             this.jsTpl = data.js
             this.vueTpl = data.vue
+            this.apiTpl = data.api
         },
         // 获取数据
         async _getData() {
