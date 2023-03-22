@@ -44,6 +44,13 @@
                                @click="copyText(apiTpl, $event)">复制 api 内容</el-button>
                     <pre>{{ apiTpl }}</pre>
                 </el-tab-pane>
+                <el-tab-pane label="权限SQL代码">
+                    <el-button type="success"
+                               class="copy-btn"
+                               size="mini"
+                               @click="copyText(authSqlTpl, $event)">复制 权限SQL代码 内容</el-button>
+                    <pre>{{ authSqlTpl }}</pre>
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
     </div>
@@ -75,6 +82,7 @@ export default {
             this.jsTpl = data.js
             this.vueTpl = data.vue
             this.apiTpl = data.api
+            this.authSqlTpl = data.auth
         },
         // 获取数据
         async _getData() {
@@ -97,6 +105,8 @@ export default {
         right: 10px;
         top: 10px;
     }
-
+    // ::v-deep .el-tabs__content {
+    //     overflow-x: scroll;
+    // }
 }
 </style>

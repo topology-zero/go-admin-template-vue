@@ -28,11 +28,7 @@ service.interceptors.response.use(
                 store.commit('user/LOGOUT')
                 return Promise.reject(data.message)
             }
-            Message({
-                message: data.message,
-                type: 'error',
-                duration: 5 * 1000
-            })
+            Message.error(data.message)
             return Promise.reject(data.message)
         } else {
             return data
@@ -42,19 +38,10 @@ service.interceptors.response.use(
         const { status } = error.response
         switch (status) {
             case 500:
-                Message({
-                    message: '系统错误',
-                    type: 'error',
-                    duration: 5 * 1000
-                })
+                Message.error('系统错误')
                 break
             default:
-                Message({
-                    message: '未知错误',
-                    type: 'error',
-                    duration: 5 * 1000
-                })
-                break
+                Message.error('未知错误')
         }
         return Promise.reject(error)
     }
