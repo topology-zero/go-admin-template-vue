@@ -188,7 +188,7 @@ export default {
                 if (this.dialogTitle == '添加权限') {
                     await add(this.formData)
                 } else {
-                    await edit(this.formData.id, this.formData)
+                    await edit(this.formDataId, this.formData)
                 }
                 this.$message.success('成功')
                 this.getAuth()
