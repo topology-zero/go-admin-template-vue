@@ -1,35 +1,31 @@
 import router from './router'
-import store from './store'
-import { Message } from 'element-ui'
+import useUserStore from './store/user'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
-    NProgress.start()
-    document.title = getPageTitle(to.meta.title)
-    const hasToken = getToken()
+router.beforeEach(async (to, from, next) => {
+    const userStore = useUserStore()
+    const { token, userInfo } = userStore
 
-    if (hasToken) {
+    NProgress.start()
+    if (token) {
         if (to.path === '/login') {
             next({ path: '/' })
             NProgress.done()
         } else {
-            const hasGetUserInfo = store.getters.userInfo.id
+            const hasGetUserInfo = userInfo.id
             if (hasGetUserInfo) {
                 next()
             } else {
                 try {
-                    await store.dispatch('user/getUserInfo')
+                    await userStore.getUserInfo()
                     next()
                 } catch (error) {
-                    store.commit('user/LOGOUT')
-                    Message.error(error)
+                    userStore.logout()
                     next(`/login?redirect=${to.path}`)
                     NProgress.done()
                 }

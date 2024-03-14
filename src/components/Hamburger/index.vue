@@ -12,20 +12,18 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Hamburger',
-    props: {
-        isActive: {
-            type: Boolean,
-            default: false
-        }
-    },
-    methods: {
-        toggleClick() {
-            this.$emit('toggleClick')
-        }
+<script setup>
+defineProps({
+    isActive: {
+        type: Boolean,
+        default: false
     }
+})
+
+const emit = defineEmits(['toggleClick'])
+
+const toggleClick = () => {
+    emit('toggleClick')
 }
 </script>
 

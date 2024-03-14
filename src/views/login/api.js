@@ -1,9 +1,8 @@
 import request from '@/utils/request'
 
-export function getCode() {
+export function getCodeApi() {
     return request({
         url: '/code',
         method: 'get'
     })
 }
-

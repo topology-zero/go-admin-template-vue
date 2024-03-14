@@ -1,15 +1,13 @@
 module.exports = {
     root: true,
-    parserOptions: {
-        parser: 'babel-eslint',
-        sourceType: 'module'
-    },
     env: {
         browser: true,
         node: true,
         es6: true,
     },
-    extends: ['plugin:vue/recommended', 'eslint:recommended'],
+
+    parser: "vue-eslint-parser",
+    extends: ['plugin:vue/vue3-essential', 'eslint:recommended'],
 
     // add your custom rules here
     //it is base on https://github.com/vuejs/eslint-config-vue
@@ -17,14 +15,10 @@ module.exports = {
         // vue html attr可写多行
         "vue/max-attributes-per-line": [2, {
             "singleline": 10,
-            "multiline": {
-                "max": 1,
-                "allowFirstLine": true
-            }
+            "multiline": 1
         }],
         "vue/singleline-html-element-content-newline": "off",
         "vue/multiline-html-element-content-newline": "off",
-        "vue/name-property-casing": ["error", "PascalCase"],
         // vue html 右括号不允许换行
         "vue/html-closing-bracket-newline": ["error", {
             "singleline": "never",
@@ -38,6 +32,8 @@ module.exports = {
             'before': true,
             'after': true
         }],
+        // vue 组件必须是驼峰命名
+        "vue/multi-word-component-names": "off",
         'block-spacing': [2, 'always'],
         'brace-style': [2, '1tbs', {
             'allowSingleLine': true
@@ -180,7 +176,11 @@ module.exports = {
             'after': true
         }],
         'space-before-blocks': [2, 'always'],
-        'space-before-function-paren': [2, 'never'],
+        'space-before-function-paren': [2, {
+            anonymous: 'always',
+            named: 'never',
+            asyncArrow: 'always'
+        }],
         'space-in-parens': [2, 'never'],
         'space-infix-ops': 2,
         'space-unary-ops': [2, {
@@ -198,9 +198,7 @@ module.exports = {
         'yoda': [2, 'never'],
         'prefer-const': 2,
         'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-        'object-curly-spacing': [2, 'always', {
-            objectsInObjects: false
-        }],
+        'object-curly-spacing': [2, 'always'],
         'array-bracket-spacing': [2, 'never']
     }
 }

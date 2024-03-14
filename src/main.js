@@ -1,29 +1,26 @@
-import Vue from 'vue'
-
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-
-import '@/styles/index.scss' // global css
-
-import App from './App'
-import store from './store'
+import App from './App.vue'
 import router from './router'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import 'virtual:svg-icons-register'
+import svgIcon from './components/SvgIcon/index.vue'
+import 'normalize.css/normalize.css'
+import '@/style/index.scss'
+import '@/permission.js'
+import permissionDirective from '@/directive/permission'
+import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/message-box/style/css'
 
-import '@/icons' // icon
-import '@/permission' // permission control
-import permission from '@/directive/permission/index'
+const app = createApp(App)
 
-Vue.use(ElementUI)
-Vue.use(permission)
+app.component('svg-icon', svgIcon)
 
-Vue.config.productionTip = false
-permission.install(Vue)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
+app.use(router)
 
-new Vue({
-    el: '#app',
-    router,
-    store,
-    render: h => h(App)
-})
+app.directive('permission', permissionDirective)
+
+app.mount('#app')

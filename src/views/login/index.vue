@@ -4,200 +4,132 @@
             <svg-icon icon-class="login"
                       style="height:100%; width:100%" />
         </div>
-        <el-form ref="loginForm"
+        <el-form ref="loginFormRef"
                  :model="loginForm"
-                 :rules="loginRules"
                  class="login-form"
-                 auto-complete="on"
                  label-position="left">
-
             <div class="title-container">
                 <h3 class="title">后台管理系统</h3>
             </div>
-
-            <el-form-item prop="username">
-                <span class="svg-container">
-                    <svg-icon icon-class="user" />
-                </span>
-                <el-input ref="username"
-                          v-model="loginForm.username"
-                          placeholder="Username"
-                          name="username"
-                          type="text"
-                          tabindex="1"
-                          auto-complete="on" />
+            <el-form-item prop="username"
+                          :rules="{ required: true, trigger: 'blur', message: '请输入用户名' }">
+                <el-input v-model="loginForm.username"
+                          placeholder="用户名">
+                    <template #prepend>
+                        <svg-icon icon-class="user" />
+                    </template>
+                </el-input>
             </el-form-item>
-
-            <el-form-item prop="password">
-                <span class="svg-container">
-                    <svg-icon icon-class="password" />
-                </span>
-                <el-input :key="passwordType"
-                          ref="password"
-                          v-model="loginForm.password"
-                          :type="passwordType"
-                          placeholder="Password"
-                          name="password"
-                          tabindex="2"
-                          auto-complete="on"
-                          @keyup.enter.native="handleLogin()" />
-                <span class="show-pwd"
-                      @click="showPwd">
-                    <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span>
+            <el-form-item prop="password"
+                          :rules="{ required: true, trigger: 'blur', min: 6, message: '长度至少为6位' }">
+                <el-input v-model="loginForm.password"
+                          type="password"
+                          placeholder="密码"
+                          show-password
+                          @keyup.enter="handleLogin()">
+                    <template #prepend>
+                        <svg-icon icon-class="password" />
+                    </template>
+                </el-input>
             </el-form-item>
-
-            <el-form-item prop="code">
-                <span class="svg-container">
-                    <svg-icon icon-class="verify" />
-                </span>
-                <el-input ref="code"
-                          v-model="loginForm.code"
-                          type="text"
-                          @keyup.enter.native="handleLogin()" />
+            <el-form-item prop="code"
+                          :rules="{ required: true, trigger: 'blur', len: 4, message: '请输入正确的验证码长度' }">
+                <el-input v-model="loginForm.code"
+                          placeholder="验证码"
+                          @keyup.enter="handleLogin()">
+                    <template #prepend>
+                        <svg-icon icon-class="verify" />
+                    </template>
+                </el-input>
                 <span class="show-virify"
                       @click="getCode()">
                     <img :src="codeImage">
                 </span>
             </el-form-item>
-
             <el-button :loading="loading"
                        type="primary"
                        style="width:100%;margin-bottom:30px;"
-                       @click.native.prevent="handleLogin()">登录</el-button>
-
+                       @click.prevent="handleLogin()">登录</el-button>
         </el-form>
     </div>
 </template>
 
-<script>
-import { getCode } from './api'
-export default {
-    name: 'Login',
-    data() {
-        return {
-            loginForm: {
-                username: 'admin',
-                password: '123456',
-                codeId: '',
-                code: ''
-            },
-            codeImage: '',
-            loginRules: {
-                user_name: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
-                password: [{ required: true, trigger: 'blur', min: 4, message: '长度至少为4位' }],
-                code: [{ required: true, trigger: 'blur', length: 4, message: '请输入正确的验证码' }]
-            },
-            loading: false,
-            passwordType: 'password',
-            redirect: undefined
-        }
-    },
-    watch: {
-        $route: {
-            handler: function(route) {
-                this.redirect = route.query && route.query.redirect
-            },
-            immediate: true
-        }
-    },
-    created() {
-        this.getCode()
-    },
-    methods: {
-        async getCode() {
-            const { data } = await getCode()
-            this.loginForm.codeId = data.id
-            this.codeImage = data.image
-        },
-        showPwd() {
-            this.passwordType = this.passwordType === 'password' ? '' : 'password'
-            this.$nextTick(() => {
-                this.$refs.password.focus()
-            })
-        },
-        async handleLogin() {
-            await this.$refs.loginForm.validate()
-            this.loading = true
-            try {
-                await this.$store.dispatch('user/login', this.loginForm)
-                this.$router.push({ path: this.redirect || '/' })
-            } finally {
-                this.getCode()
-                this.loading = false
-            }
-        }
+<script setup>
+import { getCodeApi } from './api'
+import { ref, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import useUserStore from '@/store/user'
 
+const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore()
+const loginFormRef = ref()
+
+const loginForm = ref({
+    username: '',
+    password: '',
+    codeId: '',
+    code: ''
+})
+const codeImage = ref()
+const loading = ref(false)
+const redirect = ref()
+
+onMounted(() => getCode())
+
+// 登录操作
+const handleLogin = async () => {
+    await loginFormRef.value.validate()
+    loading.value = true
+    try {
+        await userStore.login(loginForm.value)
+        router.push({ path: redirect.value || '/' })
+    } finally {
+        getCode()
+        loading.value = false
     }
 }
+
+// 获取验证码
+const getCode = async () => {
+    const { data } = await getCodeApi()
+    loginForm.value.codeId = data.id
+    codeImage.value = data.image
+}
+
+// 监听路由变化
+watch(
+    () => route.query,
+    (query) => { redirect.value = query && query.redirect },
+    { immediate: true }
+)
 </script>
 
-<style lang="scss">
-$bg: #283443;
-$light_gray: #283443;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-    .login-container .el-input input {
-        color: $cursor;
-    }
-}
-
-/* reset element-ui css */
-.login-container {
-    .el-input {
-        display: inline-block;
-        height: 47px;
-        width: 85%;
-
-        input {
-            background: transparent;
-            border: 0px;
-            -webkit-appearance: none;
-            border-radius: 0px;
-            padding: 12px 5px 12px 15px;
-            color: $light_gray;
-            height: 47px;
-            caret-color: $cursor;
-
-            &:-webkit-autofill {
-                box-shadow: 0 0 0px 1000px $bg inset !important;
-                -webkit-text-fill-color: $cursor !important;
-            }
-        }
-    }
-
-    .el-form-item {
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        color: #454545;
-    }
-}
-</style>
-
 <style lang="scss" scoped>
-$bg: #66b1ff;
-$dark_gray: #889aa4;
-$light_gray: rgb(224, 215, 215);
-
 .login-container {
     min-height: 100%;
     width: 100%;
-    background-color: $bg;
+    background-color: #66b1ff;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 
+    :deep(.el-input-group) {
+        height: 47px;
+        .el-input__inner {
+            height: 47px;
+        }
+    }
+
     .login-img {
         height: 500px;
-        width: 35%;
+        width: 650px;
     }
 
     .login-form {
         position: relative;
-        width: 520px;
+        width: 420px;
         max-width: 100%;
         background: #fff;
         border-radius: 5px;
@@ -206,47 +138,15 @@ $light_gray: rgb(224, 215, 215);
         margin-left: 150px;
         margin-right: 10%;
     }
-
-    .tips {
-        font-size: 14px;
-        color: #fff;
-        margin-bottom: 10px;
-
-        span {
-            &:first-of-type {
-                margin-right: 16px;
-            }
-        }
-    }
-
-    .svg-container {
-        padding: 6px 5px 6px 15px;
-        color: $dark_gray;
-        vertical-align: middle;
-        width: 30px;
-        display: inline-block;
-    }
-
     .title-container {
         position: relative;
 
         .title {
             font-size: 26px;
-            color: $bg;
+            color: #66b1ff;
             margin: 0px auto 40px auto;
             text-align: center;
-            // font-weight: bold;
         }
-    }
-
-    .show-pwd {
-        position: absolute;
-        right: 10px;
-        top: 7px;
-        font-size: 16px;
-        color: $dark_gray;
-        cursor: pointer;
-        user-select: none;
     }
 
     .show-virify {
@@ -255,7 +155,7 @@ $light_gray: rgb(224, 215, 215);
         top: 2px;
         bottom: 2px;
         font-size: 16px;
-        color: $dark_gray;
+        color: #889aa4;
         cursor: pointer;
         user-select: none;
 

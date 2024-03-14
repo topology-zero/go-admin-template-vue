@@ -3,8 +3,8 @@
          class="app-wrapper">
         <div v-if="device === 'mobile' && sidebar.opened"
              class="drawer-bg"
-             @click="handleClickOutside" />
-        <sidebar class="sidebar-container" />
+             @click="appStore.closeSideBar" />
+        <side class="sidebar-container" />
         <div class="has-tags-view main-container">
             <div :class="{ 'fixed-header': fixedHeader }">
                 <navbar />
@@ -15,49 +15,31 @@
     </div>
 </template>
 
-<script>
-import { Navbar, Sidebar, AppMain, TagsView } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+<script setup>
+import Side from './components/Sidebar/index.vue'
+import Navbar from './components/Navbar.vue'
+import TagsView from './components/TagsView/index.vue'
+import AppMain from './components/AppMain.vue'
+// import ResizeMixin from './mixin/ResizeHandler'
+import { computed } from 'vue'
+import useAppStore from '@/store/app'
 
-export default {
-    name: 'Layout',
-    components: {
-        Navbar,
-        Sidebar,
-        AppMain,
-        TagsView
-    },
-    mixins: [ResizeMixin],
-    computed: {
-        sidebar() {
-            return this.$store.state.app.sidebar
-        },
-        device() {
-            return this.$store.state.app.device
-        },
-        fixedHeader() {
-            return this.$store.state.settings.fixedHeader
-        },
-        classObj() {
-            return {
-                hideSidebar: !this.sidebar.opened,
-                openSidebar: this.sidebar.opened,
-                withoutAnimation: this.sidebar.withoutAnimation,
-                mobile: this.device === 'mobile'
-            }
-        }
-    },
-    methods: {
-        handleClickOutside() {
-            this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-        }
+const appStore = useAppStore()
+const { sidebar, device, fixedHeader } = appStore
+
+const classObj = computed(() => {
+    return {
+        hideSidebar: !sidebar.opened,
+        openSidebar: sidebar.opened,
+        withoutAnimation: sidebar.withoutAnimation,
+        mobile: device === 'mobile'
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
-@import "~@/styles/variables.scss";
+@import "@/style/mixin.scss";
+@import "@/style/variables.scss";
 
 .app-wrapper {
     @include clearfix;

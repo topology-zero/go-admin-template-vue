@@ -1,8 +1,8 @@
 <template>
     <div class="sidebar-logo-container"
-         :class="{ 'collapse': collapse }">
+         :class="{ 'collapse': !sidebar.opened }">
         <transition name="sidebarLogoFade">
-            <router-link v-if="collapse"
+            <router-link v-if="!sidebar.opened"
                          key="collapse"
                          class="sidebar-logo-link"
                          to="/">
@@ -25,22 +25,15 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'SidebarLogo',
-    props: {
-        collapse: {
-            type: Boolean,
-            required: true
-        }
-    },
-    data() {
-        return {
-            title: 'Vue Admin Template',
-            logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
-        }
-    }
-}
+<script setup>
+import useAppStore from '@/store/app'
+
+// store
+const appStore = useAppStore()
+const { sidebar } = appStore
+
+const title = '欧米伽'
+const logo = 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
 </script>
 
 <style lang="scss" scoped>
@@ -48,11 +41,10 @@ export default {
     transition: opacity 1.5s;
 }
 
-.sidebarLogoFade-enter,
+.sidebarLogoFade-enter-from,
 .sidebarLogoFade-leave-to {
     opacity: 0;
 }
-
 .sidebar-logo-container {
     position: relative;
     width: 100%;

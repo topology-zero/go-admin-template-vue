@@ -2,9 +2,12 @@
     <div class="navbar">
         <hamburger :is-active="sidebar.opened"
                    class="hamburger-container"
-                   @toggleClick="toggleSideBar" />
+                   @toggleClick="appStore.toggleSideBar" />
 
-        <breadcrumb class="breadcrumb-container" />
+        <top-nav v-if="useTopNav" />
+
+        <breadcrumb v-else
+                    class="breadcrumb-container" />
 
         <div class="right-menu">
             <div class="user-info">
@@ -14,141 +17,121 @@
             <el-dropdown class="avatar-container"
                          trigger="click">
                 <div class="avatar-wrapper">
-                    <img :src="require('@/assets/avatar.svg')"
-                         class="user-avatar">
+                    <svg-icon icon-class="avatar"
+                              class="user-avatar"></svg-icon>
                     <i class="el-icon-caret-bottom" />
                 </div>
-                <el-dropdown-menu slot="dropdown"
-                                  class="user-dropdown">
-                    <router-link to="/">
-                        <el-dropdown-item>
-                            回到首页
+                <template #dropdown>
+                    <el-dropdown-menu class="user-dropdown">
+                        <router-link to="/">
+                            <el-dropdown-item>
+                                回到首页
+                            </el-dropdown-item>
+                        </router-link>
+                        <el-dropdown-item divided
+                                          @click="editPwd()">
+                            <span style="display:block;">修改密码</span>
                         </el-dropdown-item>
-                    </router-link>
-                    <el-dropdown-item divided
-                                      @click.native="reset()">
-                        <span style="display:block;">修改密码</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item divided
-                                      @click.native="logout">
-                        <span style="display:block;">退出登录</span>
-                    </el-dropdown-item>
-                </el-dropdown-menu>
+                        <el-dropdown-item divided
+                                          @click="logout">
+                            <span style="display:block;">退出登录</span>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
             </el-dropdown>
         </div>
-        <el-dialog :visible.sync="showDialog"
+        <el-dialog v-model="showDialog"
                    title="修改登录密码"
                    width="30%">
-            <el-form ref="elForm"
+            <el-form ref="elFormRef"
                      :model="formData"
-                     :rules="rules"
                      label-width="100px">
                 <el-form-item label="原密码"
+                              :rules="{ required: true, trigger: 'blur', message: '原密码不得少于6位数' }"
                               prop="oldPassword">
                     <el-input v-model="formData.oldPassword"
-                              :type="passwordType"
-                              placeholder="不得少于6位数" />
-                    <span class="show-pwd"
-                          @click="showPwd">
-                        <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                    </span>
+                              type="password"
+                              show-password />
                 </el-form-item>
                 <el-form-item label="新密码"
+                              :rules=" { required: true, trigger: 'blur', min: 6, message: '新密码不得少于6位数' }"
                               prop="newPassword">
                     <el-input v-model="formData.newPassword"
-                              :type="passwordType"
-                              placeholder="不得少于6位数" />
-                    <span class="show-pwd"
-                          @click="showPwd">
-                        <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                    </span>
+                              type="password"
+                              show-password />
                 </el-form-item>
                 <el-form-item label="确认密码"
+                              :rules="{ required: true, trigger: 'blur', min: 6, message: '确认密码不得少于6位数' }"
                               prop="confirmPassword">
                     <el-input v-model="formData.confirmPassword"
-                              :type="passwordType"
-                              placeholder="不得少于6位数" />
-                    <span class="show-pwd"
-                          @click="showPwd">
-                        <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                    </span>
+                              type="password"
+                              show-password />
                 </el-form-item>
             </el-form>
-            <div slot="footer">
-                <el-button @click="showDialog = false">取消</el-button>
-                <el-button type="primary"
-                           @click="submitForm()">确定</el-button>
-            </div>
+            <template #footer>
+                <div>
+                    <el-button @click="showDialog = false">取消</el-button>
+                    <el-button type="primary"
+                               @click="submitForm()">确定</el-button>
+                </div>
+            </template>
         </el-dialog>
     </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+<script setup>
+import Breadcrumb from '@/components/Breadcrumb/index.vue'
+import Hamburger from '@/components/Hamburger/index.vue'
+import TopNav from '@/components/TopNav/index.vue'
 import { changePwd } from '@/api/user'
+import { ref } from 'vue'
+import useAppStore from '@/store/app'
+import useUserStore from '@/store/user'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
-export default {
-    components: {
-        Breadcrumb,
-        Hamburger
-    },
-    data() {
-        return {
-            showDialog: false,
-            passwordType: 'password',
-            formData: {
-                oldPassword: '',
-                newPassword: '',
-                confirmPassword: ''
-            },
-            rules: {
-                oldPassword: [{ required: true, trigger: 'blur', message: '请输入原密码' }],
-                newPassword: [{ required: true, trigger: 'blur', min: 6, message: '请输入新密码' }, { required: true, trigger: 'blur', min: 6, message: '请输入新密码' }],
-                confirmPassword: [{ required: true, trigger: 'blur', min: 6, message: '请输入确认密码' }, { required: true, trigger: 'blur', min: 6, message: '请输入确认密码' }]
-            }
-        }
-    },
-    computed: {
-        ...mapGetters([
-            'sidebar',
-            'avatar',
-            'userInfo'
-        ])
-    },
-    methods: {
-        toggleSideBar() {
-            this.$store.dispatch('app/toggleSideBar')
-        },
-        reset() {
-            this.showDialog = true
-            this.formData = {
-                oldPassword: '',
-                newPassword: '',
-                confirmPassword: ''
-            }
-        },
-        showPwd() {
-            this.passwordType = this.passwordType === 'password' ? '' : 'password'
-        },
-        async submitForm() {
-            if (this.formData.newPassword != this.formData.confirmPassword) {
-                this.$message.error('两次输入的密码不一致')
-                return
-            }
-            try {
-                await changePwd(this.formData)
-                this.$message.success('修改密码成功')
-            } finally {
-                this.showDialog = false
-            }
-        },
-        logout() {
-            this.$store.commit('user/LOGOUT')
-            this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-        }
+// store
+const appStore = useAppStore()
+const userStore = useUserStore()
+const { userInfo } = userStore
+const { sidebar, useTopNav } = appStore
+
+// route
+const router = useRouter()
+
+// refs
+const elFormRef = ref()
+
+// data
+const showDialog = ref(false)
+const formData = ref({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+})
+
+const editPwd = () => {
+    showDialog.value = true
+    elFormRef.value?.resetFields()
+}
+
+const submitForm = async () => {
+    await elFormRef.value.validate()
+    if (formData.value.newPassword != formData.value.confirmPassword) {
+        ElMessage.error('两次输入的密码不一致')
+        return
     }
+    try {
+        await changePwd(formData.value)
+        ElMessage.success('修改密码成功')
+    } finally {
+        showDialog.value = false
+    }
+}
+
+const logout = () => {
+    userStore.logout()
+    router.push(`/login`)
 }
 </script>
 
@@ -159,16 +142,8 @@ export default {
     position: relative;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
-    .show-pwd {
-        position: absolute;
-        right: 10px;
-        top: 0;
-        font-size: 16px;
-        color: #889aa4;
-        cursor: pointer;
-        user-select: none;
-    }
+    display: flex;
+    justify-content: space-between;
 
     .hamburger-container {
         line-height: 46px;
@@ -184,7 +159,7 @@ export default {
     }
 
     .breadcrumb-container {
-        float: left;
+        flex: 1;
     }
 
     .right-menu {

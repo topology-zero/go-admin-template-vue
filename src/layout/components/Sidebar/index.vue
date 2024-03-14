@@ -1,77 +1,46 @@
 <template>
     <div :class="{ 'has-logo': showLogo }">
-        <logo v-if="showLogo"
-              :collapse="isCollapse" />
+        <logo v-if="showLogo" />
         <el-scrollbar wrap-class="scrollbar-wrapper">
             <el-menu :default-active="activeMenu"
-                     :collapse="isCollapse"
-                     :background-color="variables.menuBg"
-                     :text-color="variables.menuText"
-                     :unique-opened="false"
-                     :active-text-color="variables.menuActiveText"
+                     :collapse="!sidebar.opened"
+                     background-color="#304156"
+                     text-color="#bfcbd9"
+                     active-text-color="#409EFF"
                      :collapse-transition="false"
                      mode="vertical">
-                <sidebar-item v-for="route in routes"
-                              :key="route.path"
-                              :item="route"
-                              :base-path="route.path" />
+                <sidebar-item v-for="v in routesJson"
+                              :key="v.path"
+                              :item="v"
+                              :base-path="v.path" />
             </el-menu>
         </el-scrollbar>
     </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import Logo from './Logo'
-import SidebarItem from './SidebarItem'
-import variables from '@/styles/variables.scss'
+<script setup>
+import Logo from './Logo.vue'
+import SidebarItem from './SidebarItem.vue'
+import useAppStore from '@/store/app'
+import useUserStore from '@/store/user'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
-export default {
-    components: { SidebarItem, Logo },
-    computed: {
-        ...mapGetters([
-            'sidebar',
-            'authKey'
-        ]),
-        routes() {
-            // 需要将对象深拷贝,否则会出现问题
-            const routes = JSON.parse(JSON.stringify(this.$router.options.routes))
-            if (this.authKey.length == 1 && this.authKey[0] == '*') {
-                return routes
-            }
-            this.resetRoute(routes)
-            return routes
-        },
-        activeMenu() {
-            const route = this.$route
-            const { meta, path } = route
-            // if set path, the sidebar will highlight the path you set
-            if (meta.activeMenu) {
-                return meta.activeMenu
-            }
-            return path
-        },
-        showLogo() {
-            return this.$store.state.settings.sidebarLogo
-        },
-        variables() {
-            return variables
-        },
-        isCollapse() {
-            return !this.sidebar.opened
-        }
-    },
-    methods: {
-        resetRoute(data) {
-            data.map((val, i) => {
-                if (val.permission && !this.authKey.includes(val.permission)) {
-                    data[i].hidden = true
-                }
-                if (val.children) {
-                    this.resetRoute(data[i].children)
-                }
-            })
-        }
+const route = useRoute()
+const appStore = useAppStore()
+const userStore = useUserStore()
+
+const { showLogo, sidebar, useTopNav } = storeToRefs(appStore)
+const { permissionRoute, currentRouter } = storeToRefs(userStore)
+
+const routesJson = computed(() => useTopNav.value ? currentRouter.value : permissionRoute.value)
+
+const activeMenu = computed(() => {
+    const { meta, path } = route
+    if (meta.activeMenu) {
+        return meta.activeMenu
     }
-}
+    return path
+})
 </script>

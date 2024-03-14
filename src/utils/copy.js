@@ -1,31 +1,16 @@
-import Vue from 'vue'
+import { ElMessage } from 'element-plus'
 import Clipboard from 'clipboard'
-
-function clipboardSuccess() {
-    Vue.prototype.$message({
-        message: '已复制到剪贴板',
-        type: 'success',
-        duration: 1500
-    })
-}
-
-function clipboardError() {
-    Vue.prototype.$message({
-        message: '复制到剪贴板失败',
-        type: 'error'
-    })
-}
 
 export default function handleClipboard(text, event) {
     const clipboard = new Clipboard(event.target, {
         text: () => text
     })
     clipboard.on('success', () => {
-        clipboardSuccess()
+        ElMessage.success('已复制到剪贴板')
         clipboard.destroy()
     })
     clipboard.on('error', () => {
-        clipboardError()
+        ElMessage.error('复制到剪贴板失败')
         clipboard.destroy()
     })
     clipboard.onClick(event)

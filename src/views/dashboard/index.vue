@@ -72,14 +72,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
-export default {
-    name: 'Dashboard',
-    computed: {
-        ...mapGetters(['userInfo', 'authKey'])
-    }
-}
 </script>
 
 <style lang="scss" scoped>
