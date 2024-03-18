@@ -9,7 +9,7 @@ export default defineStore('app', {
         },
         device: 'desktop',
         fixedHeader: true,
-        useTopNav: true
+        useTopNav: false
     }),
     actions: {
         toggleSideBar() {

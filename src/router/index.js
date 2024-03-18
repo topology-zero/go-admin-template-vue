@@ -19,7 +19,7 @@ const router = createRouter({
             component: Layout,
             redirect: '/dashboard',
             // 如果设置了 useTopNav = true ,则需要每个路由都设置 meta
-            meta: { title: '首页' },
+            // meta: { title: '首页' },
             children: [
                 {
                     path: 'dashboard',
