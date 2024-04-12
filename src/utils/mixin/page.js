@@ -22,6 +22,7 @@ export function pageMixin(_params, _getDataFn) {
     }
     // 跳转页面
     const handleCurrentChange = (val) => {
+        params.value.page = val
         _getDataFn()
     }
     // 搜索
