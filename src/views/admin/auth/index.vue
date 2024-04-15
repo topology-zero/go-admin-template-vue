@@ -14,7 +14,7 @@
         <el-table :data="treeData"
                   node-key="id"
                   default-expand-all
-                  :tree-props="{label: 'name',children: 'child'}"
+                  :tree-props="{label: 'name'}"
                   row-key="id"
                   border>
             <el-table-column align="left"
@@ -109,7 +109,7 @@ const treeData = ref([])
 // 获取数据
 const _getData = async () => {
     const { data } = await getList()
-    treeData.value = data.tree
+    treeData.value = data
     needloading.value = false
 }
 

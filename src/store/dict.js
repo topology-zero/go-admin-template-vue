@@ -16,11 +16,11 @@ export default defineStore('dict', {
         },
         async getRoles() {
             const { data } = await getRoles()
-            this.roleOptions = data.data
+            this.roleOptions = data
         },
         async getAuths() {
             const { data } = await getAuths()
-            this.authTreeData = data.tree
+            this.authTreeData = data
         }
     }
 })

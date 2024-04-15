@@ -20,7 +20,7 @@
                          node-key="id"
                          default-expand-all
                          show-checkbox
-                         :props="{label: 'name',children: 'child'}"
+                         :props="{label: 'name'}"
                          @check="setAuth" />
             </el-form-item>
         </el-form>
