@@ -1,6 +1,8 @@
 <template>
-    <div style="width: 100%; height: 100%;">
-        <my-title title="决策支持" />
+    <div style="width: 100%; height: 100%; position: relative"
+         class="chart4">
+        <my-title title="决策支持"
+                  class="my-title" />
         <v-chart :option="chartOption"
                  autoresize />
     </div>
@@ -65,4 +67,10 @@ const chartOption = ref({
 </script>
 
 <style lang="scss" scoped>
+.my-title {
+    transform: rotate(90deg) translateX(-50%);
+    position: absolute;
+    top: 50%;
+    left: 40px;
+}
 </style>
