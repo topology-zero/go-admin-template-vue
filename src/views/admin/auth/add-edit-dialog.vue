@@ -57,28 +57,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
-const emit = defineEmits(['update:visible', 'update:formData', 'done'])
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        default: false
-    },
-    formData: {
-        type: Object
-    }
-})
 
-const visible = computed({
-    get: () => props.visible,
-    set: (value) => emit('update:visible', value)
-})
-const formData = computed({
-    get: () => props.formData,
-    set: (value) => emit('update:formData', value)
-})
+const emit = defineEmits(['done'])
+const visible = defineModel('visible', { type: Boolean })
+const formData = defineModel('formData', { type: Object })
 
 // 提交表单
 const elFormRef = ref()

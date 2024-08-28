@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
 import useDict from '@/store/dict'
@@ -41,33 +41,11 @@ import useDict from '@/store/dict'
 const dictStore = useDict()
 const { authTreeData } = dictStore
 
-const emit = defineEmits(['update:visible', 'update:formData', 'update:loading', 'done'])
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        default: false
-    },
-    loading: {
-        type: Boolean,
-        default: false
-    },
-    formData: {
-        type: Object
-    }
-})
+const emit = defineEmits(['done'])
 
-const visible = computed({
-    get: () => props.visible,
-    set: (value) => emit('update:visible', value)
-})
-const loading = computed({
-    get: () => props.loading,
-    set: (value) => emit('update:loading', value)
-})
-const formData = computed({
-    get: () => props.formData,
-    set: (value) => emit('update:formData', value)
-})
+const visible = defineModel('visible', { type: Boolean })
+const loading = defineModel('loading', { type: Boolean })
+const formData = defineModel('formData', { type: Object })
 
 const treeRef = ref()
 const elFormRef = ref()

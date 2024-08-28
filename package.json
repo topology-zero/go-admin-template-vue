@@ -10,6 +10,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@wangeditor/editor": "^5.1.23",
+        "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.5.0",
         "echarts": "^5.5.0",
         "element-plus": "^2.3.12",
@@ -20,14 +22,14 @@
         "path-to-regexp": "^6.2.1",
         "pinia": "^2.1.6",
         "pinia-plugin-persistedstate": "^3.2.0",
-        "vue": "^3.3.4",
+        "vue": "^3.4.15",
         "vue-echarts": "^6.6.9",
         "vue-router": "^4.2.4"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.2.3",
         "eslint": "^8.49.0",
-        "eslint-plugin-vue": "^9.17.0",
+        "eslint-plugin-vue": "^9.25.0",
         "fast-glob": "^3.3.1",
         "rollup-plugin-visualizer": "^5.9.2",
         "sass": "^1.66.1",
