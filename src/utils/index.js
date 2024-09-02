@@ -1,4 +1,7 @@
+import useUserStore from '@/store/user'
+
 /**
+ * URL转对象
  * @param {string} url
  * @returns {Object}
  */
@@ -18,4 +21,22 @@ export function param2Obj(url) {
         }
     })
     return obj
+}
+
+/**
+ * 对象转URL
+ * @param {Object} obj
+ * @returns {string}
+ */
+export function objToUrl(obj) {
+    const tempArray = []
+    const userStore = useUserStore()
+    const { token } = userStore
+    for (const item in obj) {
+        if (obj[item]) {
+            tempArray.push(`${item}=${obj[item]}`)
+        }
+    }
+    tempArray.push(`Authorization=${token}`)
+    return tempArray.join('&')
 }
