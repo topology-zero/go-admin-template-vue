@@ -64,7 +64,7 @@
 <script setup>
 import { ref, nextTick } from 'vue'
 import { getList, del, getDetail } from './api'
-import { pageMixin } from '@/utils/mixin/page'
+import { usePage } from '@/utils/mixin/page'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddEditDialog from './add-edit-dialog.vue'
 
@@ -91,7 +91,7 @@ const {
     total,
     handleSizeChange,
     handleCurrentChange
-} = pageMixin(_getData)
+} = usePage(_getData)
 
 // data
 const formData = ref(defaultFormData())

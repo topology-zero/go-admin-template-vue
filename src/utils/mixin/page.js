@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue'
 
-export function pageMixin(_getDataFn, _params = {}, init = true) {
+export function usePage(_getDataFn, _params = {}, init = true) {
     onMounted(() => init && _getDataFn())
 
     // data
