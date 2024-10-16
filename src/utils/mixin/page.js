@@ -1,7 +1,7 @@
 import { ref, onMounted } from 'vue'
 
-export function pageMixin(_params, _getDataFn) {
-    onMounted(() => _getDataFn())
+export function pageMixin(_getDataFn, _params = {}, init = true) {
+    onMounted(() => init && _getDataFn())
 
     // data
     const tableLoading = ref(false)

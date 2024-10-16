@@ -91,7 +91,7 @@ const {
     total,
     handleSizeChange,
     handleCurrentChange
-} = pageMixin({ name: '' }, _getData)
+} = pageMixin(_getData)
 
 // data
 const formData = ref(defaultFormData())

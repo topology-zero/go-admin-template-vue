@@ -113,7 +113,7 @@ const {
     total,
     handleSizeChange,
     handleCurrentChange
-} = pageMixin({ name: '' }, _getData)
+} = pageMixin(_getData)
 
 // 添加用户
 const handleAdd = () => {
