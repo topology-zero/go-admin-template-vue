@@ -33,7 +33,14 @@ export function objToUrl(obj) {
     const userStore = useUserStore()
     const { token } = userStore
     for (const item in obj) {
-        if (obj[item]) {
+        if (obj[item] == undefined) {
+            continue
+        }
+        if (obj[item] instanceof Array) {
+            for (const index in obj[item]) {
+                tempArray.push(`${item}[]=${obj[item][index]}`)
+            }
+        } else {
             tempArray.push(`${item}=${obj[item]}`)
         }
     }
