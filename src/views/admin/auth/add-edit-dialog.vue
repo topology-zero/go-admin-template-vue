@@ -1,6 +1,8 @@
 <template>
     <el-dialog v-model="visible"
-               :title="formData.id == 0 ? '添加权限' : '编辑权限'">
+               :close-on-click-modal="false"
+               :title="formData.id == 0 ? '添加权限' : '编辑权限'"
+               width="30%">
         <el-form ref="elFormRef"
                  :model="formData"
                  label-width="100px">
