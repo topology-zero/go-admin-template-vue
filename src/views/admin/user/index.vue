@@ -78,7 +78,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { getList, del, getDetail } from './api'
+import { getList, del } from './api'
 import { usePage } from '@/utils/mixin/page'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddEditDialog from './add-edit-dialog.vue'
@@ -124,8 +124,7 @@ const handleAdd = () => {
 // 编辑用户
 const handleEdit = async (info) => {
     dialogVisible.value = true
-    const { data } = await getDetail(info.id)
-    formData.value = data
+    Object.assign(formData.value, info)
 }
 
 // 删除用户

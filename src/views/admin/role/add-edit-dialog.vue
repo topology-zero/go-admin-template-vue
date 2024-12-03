@@ -37,9 +37,10 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
 import useDict from '@/store/dict'
+import { storeToRefs } from 'pinia'
 
 const dictStore = useDict()
-const { authTreeData } = dictStore
+const { authTreeData } = storeToRefs(dictStore)
 
 const emit = defineEmits(['done'])
 
@@ -62,6 +63,7 @@ const submitForm = async () => {
     }
     visible.value = false
     loading.value = false
+    dictStore.getRoles()
     ElMessage.success('成功')
     emit('done')
 }

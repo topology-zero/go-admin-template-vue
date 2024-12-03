@@ -60,6 +60,9 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
+import useDict from '@/store/dict'
+
+const dictStore = useDict()
 
 const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
@@ -79,6 +82,7 @@ const submitForm = async () => {
         await edit(formData.value.id, formData.value)
     }
     ElMessage.success('成功')
+    dictStore.getAuths()
     visible.value = false
     emit('done')
 }

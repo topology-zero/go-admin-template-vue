@@ -40,7 +40,7 @@ const router = createRouter({
                 // 用户相关
                 {
                     path: 'user',
-                    name: 'user',
+                    name: 'admin-user',
                     permission: 'admin:user',
                     component: () => import('@/views/admin/user/index.vue'),
                     meta: { title: '用户管理', icon: 'user' }
@@ -48,7 +48,7 @@ const router = createRouter({
                 // 角色相关
                 {
                     path: 'role',
-                    name: 'role',
+                    name: 'admin-role',
                     permission: 'admin:role',
                     component: () => import('@/views/admin/role/index.vue'),
                     meta: { title: '角色管理', icon: 'role' }
@@ -56,7 +56,7 @@ const router = createRouter({
                 // 权限相关
                 {
                     path: 'auth',
-                    name: 'auth',
+                    name: 'admin-auth',
                     permission: 'admin:auth',
                     component: () => import('@/views/admin/auth/index.vue'),
                     meta: { title: '权限管理', icon: 'auth' }

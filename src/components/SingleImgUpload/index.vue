@@ -48,7 +48,10 @@ const props = defineProps({
         type: String,
         default: import.meta.env.VITE_APP_BASE_API + '/upload/image'
     },
-    headers: Object,
+    headers: {
+        type: Object,
+        default: () => ({})
+    },
     data: Object,
     accept: {
         type: String,

@@ -2,21 +2,14 @@ import request from '@/utils/request'
 
 export function getList(params) {
     return request({
-        url: '/user',
+        url: '/admin/user',
         params
-    })
-}
-
-export function getDetail(id) {
-    return request({
-        url: '/user/' + id,
-        method: 'get'
     })
 }
 
 export function add(data) {
     return request({
-        url: '/user',
+        url: '/admin/user',
         method: 'post',
         data
     })
@@ -24,7 +17,7 @@ export function add(data) {
 
 export function edit(id, data) {
     return request({
-        url: '/user/' + id,
+        url: '/admin/user/' + id,
         method: 'put',
         data
     })
@@ -32,7 +25,7 @@ export function edit(id, data) {
 
 export function del(id) {
     return request({
-        url: '/user/' + id,
+        url: '/admin/user/' + id,
         method: 'delete'
     })
 }
