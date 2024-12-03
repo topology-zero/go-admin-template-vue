@@ -13,6 +13,7 @@
         </div>
         <el-table :data="treeData"
                   node-key="id"
+                  size="small"
                   default-expand-all
                   :tree-props="{label: 'name'}"
                   row-key="id"
@@ -20,11 +21,10 @@
             <el-table-column align="left"
                              prop="name"
                              label="节点名"
-                             min-width="200" />
+                             min-width="100" />
             <el-table-column align="left"
                              prop="key"
-                             label="权限标识"
-                             width="180" />
+                             label="权限标识" />
             <el-table-column align="center"
                              label="是否菜单栏"
                              width="150">
