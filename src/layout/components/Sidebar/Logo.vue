@@ -6,20 +6,16 @@
                          key="collapse"
                          class="sidebar-logo-link"
                          to="/">
-                <img v-if="logo"
-                     :src="logo"
+                <img src="https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png"
                      class="sidebar-logo">
-                <h1 v-else
-                    class="sidebar-title">{{ title }} </h1>
             </router-link>
             <router-link v-else
                          key="expand"
                          class="sidebar-logo-link"
                          to="/">
-                <img v-if="logo"
-                     :src="logo"
+                <img src="https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png"
                      class="sidebar-logo">
-                <h1 class="sidebar-title">{{ title }} </h1>
+                <h1 class="sidebar-title">欧米伽</h1>
             </router-link>
         </transition>
     </div>
@@ -28,12 +24,8 @@
 <script setup>
 import useAppStore from '@/store/app'
 
-// store
 const appStore = useAppStore()
 const { sidebar } = appStore
-
-const title = '欧米伽'
-const logo = 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
 </script>
 
 <style lang="scss" scoped>

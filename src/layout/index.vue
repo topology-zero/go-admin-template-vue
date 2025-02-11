@@ -1,9 +1,6 @@
 <template>
     <div :class="classObj"
          class="app-wrapper">
-        <div v-if="device === 'mobile' && sidebar.opened"
-             class="drawer-bg"
-             @click="appStore.closeSideBar" />
         <side class="sidebar-container" />
         <div class="has-tags-view main-container">
             <div :class="{ 'fixed-header': fixedHeader }">
@@ -20,19 +17,17 @@ import Side from './components/Sidebar/index.vue'
 import Navbar from './components/Navbar.vue'
 import TagsView from './components/TagsView/index.vue'
 import AppMain from './components/AppMain.vue'
-// import ResizeMixin from './mixin/ResizeHandler'
 import { computed } from 'vue'
 import useAppStore from '@/store/app'
 
 const appStore = useAppStore()
-const { sidebar, device, fixedHeader } = appStore
+const { sidebar, fixedHeader } = appStore
 
 const classObj = computed(() => {
     return {
         hideSidebar: !sidebar.opened,
         openSidebar: sidebar.opened,
-        withoutAnimation: sidebar.withoutAnimation,
-        mobile: device === 'mobile'
+        withoutAnimation: sidebar.withoutAnimation
     }
 })
 </script>
@@ -46,11 +41,6 @@ const classObj = computed(() => {
     position: relative;
     height: 100%;
     width: 100%;
-
-    &.mobile.openSidebar {
-        position: fixed;
-        top: 0;
-    }
 }
 
 .drawer-bg {
@@ -74,9 +64,5 @@ const classObj = computed(() => {
 
 .hideSidebar .fixed-header {
     width: calc(100% - 54px);
-}
-
-.mobile .fixed-header {
-    width: 100%;
 }
 </style>

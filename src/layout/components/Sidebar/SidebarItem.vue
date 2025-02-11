@@ -32,7 +32,6 @@ import path from 'path-browserify'
 import { isExternal } from '@/utils/validate'
 import Icon from './Icon.vue'
 import AppLink from './Link.vue'
-import { useFixBugIniOS } from './FixiOSBug'
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -45,9 +44,6 @@ const props = defineProps({
         default: ''
     }
 })
-
-// mixin
-useFixBugIniOS()
 
 // data
 const onlyOneChild = ref({})

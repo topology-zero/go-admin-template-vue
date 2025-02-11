@@ -7,7 +7,6 @@ export default defineStore('app', {
             opened: true,
             withoutAnimation: false
         },
-        device: 'desktop',
         fixedHeader: true,
         useTopNav: false
     }),
@@ -19,9 +18,6 @@ export default defineStore('app', {
         closeSideBar(withoutAnimation) {
             this.sidebar.opened = false
             this.sidebar.withoutAnimation = withoutAnimation
-        },
-        toggleDevice(device) {
-            this.device = device
         }
     },
     persist: {
