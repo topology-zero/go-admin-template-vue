@@ -2,6 +2,7 @@
     "name": "vite-vue-starter",
     "private": true,
     "version": "0.0.0",
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build:prod": "vite build",
@@ -13,8 +14,9 @@
         "@wangeditor/editor": "^5.1.23",
         "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.5.0",
+        "dayjs": "^1.11.13",
         "echarts": "^5.5.0",
-        "element-plus": "^2.3.12",
+        "element-plus": "^2.9.10",
         "normalize.css": "^8.0.1",
         "nprogress": "^0.2.0",
         "numeral": "^2.0.6",
@@ -22,23 +24,28 @@
         "path-to-regexp": "^6.2.1",
         "pinia": "^2.1.6",
         "pinia-plugin-persistedstate": "^3.2.0",
-        "vue": "^3.4.15",
+        "vue": "^3.5.13",
         "vue-echarts": "^6.6.9",
-        "vue-router": "^4.2.4"
+        "vue-router": "^4.5.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "^4.2.3",
-        "eslint": "^8.49.0",
+        "@eslint/js": "^9.27.0",
+        "@vitejs/plugin-vue": "^5.2.3",
+        "@vitejs/plugin-vue-jsx": "^4.1.2",
+        "eslint": "^9.22.0",
+        "eslint-plugin-jsx": "^0.1.0",
         "eslint-plugin-vue": "^9.25.0",
         "fast-glob": "^3.3.1",
+        "globals": "^16.1.0",
         "rollup-plugin-visualizer": "^5.9.2",
         "sass": "^1.66.1",
         "svgo": "^3.0.2",
         "unplugin-auto-import": "^0.16.6",
         "unplugin-vue-components": "^0.25.2",
-        "vite": "^4.4.9",
+        "vite": "^6.2.4",
         "vite-plugin-compression": "^0.5.1",
         "vite-plugin-eslint": "^1.8.1",
-        "vite-plugin-svg-icons": "^2.0.1"
+        "vite-plugin-svg-icons": "^2.0.1",
+        "vite-plugin-vue-devtools": "^7.7.2"
     }
 }

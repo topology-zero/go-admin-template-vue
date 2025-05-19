@@ -15,7 +15,7 @@
                   node-key="id"
                   size="small"
                   default-expand-all
-                  :tree-props="{label: 'name'}"
+                  :tree-props="{ label: 'name' }"
                   row-key="id"
                   border>
             <el-table-column align="left"
@@ -28,7 +28,7 @@
             <el-table-column align="center"
                              label="是否菜单栏"
                              width="150">
-                <template #default="{row}">
+                <template #default="{ row }">
                     <el-tag v-if="row.isMenu == 0"
                             type="warning">否</el-tag>
                     <el-tag v-else
@@ -38,14 +38,20 @@
             <el-table-column align="center"
                              label="请求方法"
                              width="150">
-                <template #default="{row}">
+                <template #default="{ row }">
                     <el-tag v-if="row.action == 'get'">{{ row.action }}</el-tag>
                     <el-tag v-if="row.action == 'post'"
-                            type="success">{{ row.action }}</el-tag>
+                            type="success">{{
+                                row.action
+                            }}</el-tag>
                     <el-tag v-if="row.action == 'put'"
-                            type="info">{{ row.action }}</el-tag>
+                            type="info">{{
+                                row.action
+                            }}</el-tag>
                     <el-tag v-if="row.action == 'delete'"
-                            type="danger">{{ row.action }}</el-tag>
+                            type="danger">{{
+                                row.action
+                            }}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column align="left"
@@ -55,7 +61,7 @@
             <el-table-column align="center"
                              label="操作"
                              width="260">
-                <template #default="{row}">
+                <template #default="{ row }">
                     <el-button v-permission="`admin:auth:add`"
                                type="success"
                                size="small"
@@ -81,7 +87,6 @@
         <add-edit-dialog v-model:visible="showDialog"
                          v-model:formData="formData"
                          @done="_getData" />
-
     </div>
 </template>
 <script setup>

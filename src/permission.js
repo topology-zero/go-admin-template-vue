@@ -25,6 +25,7 @@ router.beforeEach(async (to, from, next) => {
                     await userStore.getUserInfo()
                     next()
                 } catch (error) {
+                    console.log(error)
                     userStore.logout()
                     next(`/login?redirect=${to.path}`)
                     NProgress.done()
