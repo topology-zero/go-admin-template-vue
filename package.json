@@ -16,7 +16,7 @@
         "axios": "^1.5.0",
         "dayjs": "^1.11.13",
         "echarts": "^5.5.0",
-        "element-plus": "^2.9.10",
+        "element-plus": "^2.10.2",
         "normalize.css": "^8.0.1",
         "nprogress": "^0.2.0",
         "numeral": "^2.0.6",
