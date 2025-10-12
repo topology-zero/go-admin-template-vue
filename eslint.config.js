@@ -16,6 +16,11 @@ export default defineConfig([
                 ...globals.commonjs,
                 ...globals.es2021,
                 ...globals.node
+            },
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true // Enable JSX parsing
+                }
             }
         }
     },
