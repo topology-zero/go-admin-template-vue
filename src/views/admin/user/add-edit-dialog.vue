@@ -74,11 +74,9 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { add, edit } from './api'
 import useDict from '@/store/dict'
-// import imageUpload from '@/components/SingleImgUpload/index.vue'
-// import Editor from '@/components/WangEditor/index.vue'
+import { storeToRefs } from 'pinia'
 
-const dictStore = useDict()
-const { roleOptions } = dictStore
+const { roleOptions } = storeToRefs(useDict())
 
 const emit = defineEmits(['done'])
 const visible = defineModel('visible', { type: Boolean })
