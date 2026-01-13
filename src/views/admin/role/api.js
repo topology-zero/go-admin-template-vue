@@ -9,8 +9,7 @@ export function getList(params) {
 
 export function getDetail(id) {
     return request({
-        url: '/admin/role/' + id,
-        method: 'get'
+        url: '/admin/role/' + id
     })
 }
 
